@@ -2,14 +2,12 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<!-- This site is hosted on Netlify. Anyone can build and deploy a site
-     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=f289907c-97a1-4929-af2f-954b5421397a
-     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registre des personnes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <style>
 :root{--blue:#3b4fd8;--blue2:#2a39a8;--ink:#121a33;--bg:#f3f5fb;--card:#fff;--line:#e4e8f3;--text:#1a2340;--muted:#6f7a94;--soft:#eef1ff;--ok:#12a46b;--bad:#d93f3f;--warn:#e89a14;--gold:#f6c453;--r:20px;--sh:0 18px 45px -18px rgba(30,45,110,.22)}
 *{box-sizing:border-box}
@@ -150,8 +148,8 @@ input.bad,select.bad{border-color:var(--bad);box-shadow:0 0 0 4px #d93f3f18}
   </div>
   <div class="hbtns">
     <button class="secondary" id="backup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 20h16"/></svg>Sauvegarder</button>
-    <button class="secondary" id="restore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 20h16"/></svg>Restaurer une sauvegarde</button>
-    <input type="file" id="backupFile" accept=".json,application/json" hidden>
+    <button class="secondary" id="restore" title="Sauvegarde JSON ou document Word (.docx) exporté depuis ce registre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 20h16"/></svg>Restaurer une sauvegarde</button>
+    <input type="file" id="backupFile" accept=".json,.docx,application/json,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
   </div>
 </header>
 
@@ -172,7 +170,7 @@ input.bad,select.bad{border-color:var(--bad);box-shadow:0 0 0 4px #d93f3f18}
       </div>
       <div class="tw">
         <table>
-          <thead><tr><th>Personne</th><th>Naissance</th><th>Père</th><th>Mère</th><th>Téléphone(s)</th><th class="ac">Actions</th></tr></thead>
+          <thead><tr><th>Personne</th><th>Date et lieu de naissance</th><th>Père</th><th>Mère</th><th>Téléphone(s)</th><th class="ac">Actions</th></tr></thead>
           <tbody id="tableBody"></tbody>
         </table>
         <div id="empty" class="empty"></div>
@@ -320,7 +318,7 @@ $("wordBtn").onclick=async()=>{
   try{
     const {Document,Packer,Paragraph,Table,TableRow,TableCell,WidthType,BorderStyle,AlignmentType,HeadingLevel,TextRun,PageOrientation}=window.docx;
     const bd={style:BorderStyle.SINGLE,size:1,color:"D5DCE6"},borders={top:bd,bottom:bd,left:bd,right:bd};
-    const heads=["Prénom(s)","Nom(s)","Naissance","Père","Mère","Téléphone(s)"],w=[2300,2000,3000,2400,2400,2300];
+    const heads=["Prénom(s)","Nom(s)","Date et lieu de naissance","Père","Mère","Téléphone(s)"],w=[2300,2000,3000,2400,2400,2300];
     const cell=(v,h,i)=>new TableCell({width:{size:w[i],type:WidthType.DXA},margins:{top:90,bottom:90,left:80,right:80},borders,shading:h?{fill:"E8EDFF"}:undefined,
       children:String(v||"—").split("\n").map(t=>new Paragraph({children:[new TextRun({text:t,bold:h,font:"Arial",size:h?17:16,color:h?"243A8A":"243247"})]}))});
     const rows=sorted().map(p=>[p.firstName,p.lastName,birthText(p),p.fatherName,p.motherName,phones(p).map(([l,v])=>`${l} : ${v}`).join("\n")]);
@@ -341,12 +339,46 @@ function fixDate(v){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(iso))return null;
   const d=new Date(iso+"T00:00:00Z");return !isNaN(d)&&d.toISOString().slice(0,10)===iso?iso:null;
 }
+async function parseDocx(file){
+  if(!window.JSZip)throw new Error("jszip");
+  const zip=await JSZip.loadAsync(await file.arrayBuffer());
+  const xml=await zip.file("word/document.xml").async("string");
+  const doc=new DOMParser().parseFromString(xml,"application/xml");
+  const cellText=tc=>Array.from(tc.getElementsByTagName("w:p")).map(p=>Array.from(p.getElementsByTagName("w:t")).map(t=>t.textContent).join("")).join("\n").trim();
+  const clean=v=>/^[—–-]?$/.test(v.trim())?"":v.trim();
+  const out=[];
+  for(const tbl of Array.from(doc.getElementsByTagName("w:tbl"))){
+    const rows=Array.from(tbl.getElementsByTagName("w:tr")).map(tr=>Array.from(tr.childNodes).filter(n=>n.nodeName==="w:tc").map(cellText));
+    const hi=rows.findIndex(r=>r.some(c=>norm(c).startsWith("prenom")));
+    if(hi<0)continue;
+    const h=rows[hi].map(norm),ix=(t,d)=>{const i=h.findIndex(x=>t(x));return i<0?d:i};
+    const c={fn:ix(x=>x.startsWith("prenom"),0),ln:ix(x=>x.startsWith("nom"),1),b:ix(x=>x.includes("naissance"),2),f:ix(x=>x.startsWith("pere"),3),m:ix(x=>x.startsWith("mere"),4),t:ix(x=>x.includes("tel"),5)};
+    rows.slice(hi+1).forEach(r=>{
+      if(r.every(x=>!x.trim()))return;
+      const g=i=>clean(r[i]||""),o={firstName:g(c.fn),lastName:g(c.ln),birthDate:"",birthPlace:"",fatherName:g(c.f),motherName:g(c.m),fatherPhone:"",motherPhone:"",phone:""};
+      const bt=(r[c.b]||"").replace(/\s+/g," ").trim(),dm=/(\d{1,2}\/\d{1,2}\/\d{4})/.exec(bt),pm=/(?:^|\s)à\s+(.+)$/.exec(bt);
+      if(dm)o.birthDate=dm[1];
+      if(pm)o.birthPlace=pm[1].trim();
+      (r[c.t]||"").split("\n").map(x=>x.trim()).filter(x=>x&&!/^[—–-]$/.test(x)).forEach(l=>{
+        let m;
+        if(m=/^p[èe]re\s*:\s*(.+)$/i.exec(l))o.fatherPhone=m[1];
+        else if(m=/^m[èe]re\s*:\s*(.+)$/i.exec(l))o.motherPhone=m[1];
+        else if(m=/^t[ée]l\.?\s*:\s*(.+)$/i.exec(l))o.phone=m[1];
+        else o.phone=l;
+      });
+      out.push(o);
+    });
+  }
+  if(!out.length)throw new Error("table");
+  return out;
+}
 $("restore").onclick=()=>$("backupFile").click();
 $("backupFile").addEventListener("change",async e=>{
   const file=e.target.files[0];e.target.value="";if(!file)return;
   let parsed;
-  try{parsed=JSON.parse((await file.text()).replace(/^\uFEFF/,""))}
-  catch{return modal({icon:"error",title:"Fichier illisible",body:`<p>« ${esc(file.name)} » n’est pas un fichier JSON valide. Choisissez une sauvegarde créée par ce registre.</p>`,actions:[{label:"Fermer",cls:"primary",value:true}]})}
+  const isDocx=/\.docx$/i.test(file.name);
+  try{parsed=isDocx?await parseDocx(file):JSON.parse((await file.text()).replace(/^\uFEFF/,""))}
+  catch{return modal({icon:"error",title:"Fichier illisible",body:`<p>« ${esc(file.name)} » n’a pas pu être lu. Choisissez une sauvegarde JSON ou un document Word exporté depuis ce registre.</p>`,actions:[{label:"Fermer",cls:"primary",value:true}]})}
   const raw=Array.isArray(parsed)?parsed:parsed&&parsed.people;
   if(!Array.isArray(raw))return modal({icon:"error",title:"Format non reconnu",body:"<p>Aucune liste de personnes n’a été trouvée dans ce fichier.</p>",actions:[{label:"Fermer",cls:"primary",value:true}]});
   const valid=[],skipped=[],seen=new Set();let badDates=0;
@@ -363,16 +395,16 @@ $("backupFile").addEventListener("change",async e=>{
   if(skipped.length)alerts.push(`${skipped.length} fiche(s) ignorée(s) : prénom ou nom manquant (ligne${skipped.length>1?"s":""} ${skipped.slice(0,8).join(", ")}${skipped.length>8?"…":""}).`);
   if(badDates)alerts.push(`${badDates} date(s) de naissance invalide(s) laissée(s) vide(s).`);
   const has=people.length>0;
-  const body=`<p>Fichier : <b>${esc(file.name)}</b></p>
+  const body=`<p>${isDocx?"Document Word":"Sauvegarde JSON"} : <b>${esc(file.name)}</b></p>
     <div class="chips"><div class="chip g"><b>${valid.length}</b><span>fiches à importer</span></div><div class="chip"><b>${withBirth}</b><span>avec date et lieu</span></div><div class="chip w"><b>${skipped.length}</b><span>ignorée(s)</span></div></div>
     <div class="prev">${prev}${valid.length>4?`<div><em>… et ${valid.length-4} autre(s) fiche(s)</em></div>`:""}</div>
     ${alerts.length?`<div class="alerts">À noter :<ul>${alerts.map(a=>`<li>${a}</li>`).join("")}</ul></div>`:""}
     ${has?`<label class="opt"><input type="radio" name="mode" value="replace" checked><div><b>Remplacer les fiches actuelles</b><span>Les ${people.length} fiches existantes seront supprimées.</span></div></label>
-    <label class="opt"><input type="radio" name="mode" value="merge"><div><b>Ajouter aux fiches actuelles</b><span>Les fiches déjà présentes (même identifiant) ne sont pas dupliquées.</span></div></label>`:""}`;
+    <label class="opt"><input type="radio" name="mode" value="merge"><div><b>Ajouter aux fiches actuelles</b><span>Les fiches déjà présentes (${isDocx?"même nom et même naissance":"même identifiant"}) ne sont pas dupliquées.</span></div></label>`:""}`;
   const res=await modal({icon:"upload",title:"Valider l’importation ?",wide:true,body,actions:[{label:"Annuler",cls:"secondary",value:null},{label:`Importer ${valid.length} fiche${valid.length>1?"s":""}`,cls:"primary",value:o=>{const r=o.querySelector('input[name=mode]:checked');return r?r.value:"replace"}}]});
   if(!res)return toast("Importation annulée.");
   let added=valid,dupes=0;
-  if(res==="merge"){const ids=new Set(people.map(p=>p.id));added=valid.filter(p=>!ids.has(p.id));dupes=valid.length-added.length;people=[...people,...added]}
+  if(res==="merge"){const ids=new Set(people.map(p=>p.id)),sig=p=>norm([p.firstName,p.lastName,p.birthDate,p.birthPlace].join("|")),sigs=new Set(people.map(sig));added=valid.filter(p=>isDocx?!sigs.has(sig(p)):!ids.has(p.id));dupes=valid.length-added.length;people=[...people,...added]}
   else people=valid;
   if(!saveLocal())return;
   render();
@@ -383,4 +415,3 @@ loadLocal();render();
 </script>
 </body>
 </html>
-<script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="f289907c-97a1-4929-af2f-954b5421397a" data-app-host="app.netlify.com" data-account-tier="free"></script>
