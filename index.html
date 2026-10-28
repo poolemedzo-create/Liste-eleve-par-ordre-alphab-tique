@@ -2,6 +2,9 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=f289907c-97a1-4929-af2f-954b5421397a
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registre des personnes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,16 +31,16 @@ h2{margin:0 0 4px;font-size:clamp(25px,2.7vw,33px);letter-spacing:-1px;font-weig
 .stats{display:flex;align-items:center;gap:15px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 22px 12px 14px;box-shadow:var(--sh)}
 .stats .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--soft);color:var(--blue)}
 .stats strong{display:block;font-size:30px;line-height:1;color:var(--blue);letter-spacing:-1px;font-weight:800}
-.layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:22px;align-items:start}
+.layout{display:block}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);min-width:0}
 .pt{padding:20px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#f9faff)}
 .pt h3{margin:0 0 3px;font-size:16px;font-weight:800}
 form{padding:22px;display:grid;gap:14px}
 .field{display:grid;gap:6px}
 label{font-size:12px;font-weight:700;color:#4a5878}
-input{width:100%;min-width:0;padding:12px 13px;border:1.5px solid #dde3f0;border-radius:12px;font:inherit;font-size:13px;background:#fafbff;color:var(--text);transition:.18s}
+input,select{width:100%;min-width:0;padding:12px 13px;border:1.5px solid #dde3f0;border-radius:12px;font:inherit;font-size:13px;background:#fafbff;color:var(--text);transition:.18s}
 input::placeholder{color:#a3aec4}
-input:focus{outline:0;background:#fff;border-color:var(--blue);box-shadow:0 0 0 4px #3b4fd81c}
+input:focus,select:focus{outline:0;background:#fff;border-color:var(--blue);box-shadow:0 0 0 4px #3b4fd81c}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid transparent;border-radius:12px;padding:11px 15px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s}
 button:hover{transform:translateY(-1px)}
@@ -59,7 +62,7 @@ header .secondary:hover{background:#ffffff33}
 .search{flex:1;min-width:200px;position:relative}
 .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;color:#97a3bd}
 .search input{padding-left:38px}
-.tw{overflow:auto;max-height:660px}
+.tw{overflow:auto;max-height:calc(100vh - 290px);min-height:320px}
 table{border-collapse:separate;border-spacing:0;width:100%;min-width:980px;font-size:12.5px}
 th{position:sticky;top:0;z-index:1;background:#f3f5fc;color:#56658a;text-align:left;font-size:11.5px;font-weight:800}
 td,th{padding:13px 14px;border-bottom:1px solid #edf0f8;vertical-align:middle}
@@ -116,10 +119,25 @@ footer{text-align:center;color:#8d98b0;font-size:11.5px;padding:26px 15px}
 .opt:has(input:checked){border-color:var(--blue);background:var(--soft)}
 .opt input{width:auto;margin-top:3px;accent-color:var(--blue)}
 .opt b{display:block;color:var(--text);font-size:13px}.opt span{font-size:12px;color:var(--muted)}
-@media(min-width:1001px){.fp{position:sticky;top:18px}}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}}
 @media(max-width:650px){main{padding:0 12px}header{padding:20px 16px}.hbtns{width:100%}.hbtns button{flex:1}.stats{width:100%}.toolbar button{flex:1}.search{flex-basis:100%}.ma{flex-direction:column-reverse}}
+@media(max-width:650px){.fm .grid{grid-template-columns:1fr}.fh,.fb{padding-left:20px;padding-right:20px}.fm .ma{padding:14px 20px 20px}}
 @media(max-width:380px){.grid{grid-template-columns:1fr}}
+select{appearance:none;-webkit-appearance:none;padding-right:34px;cursor:pointer;background:#fafbff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%236f7a94' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 13px center}
+.introR{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.add{padding:15px 24px;font-size:13.5px;border-radius:14px}
+.empty button{margin:0 auto}
+.fm{text-align:left;width:min(680px,100%);padding:0;overflow:hidden;display:flex;flex-direction:column}
+.fh{display:flex;gap:15px;align-items:center;padding:24px 28px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#f5f7ff,#fff)}
+.fh .ic{margin:0;width:54px;height:54px;border-radius:17px;flex:none}
+.fh h3{margin:0 0 2px}
+.fb{padding:20px 28px 8px;display:grid;gap:16px;overflow:auto}
+.sec{font-size:13px;font-weight:800;color:var(--blue);display:flex;align-items:center;gap:12px}
+.sec:after{content:"";flex:1;height:1px;background:var(--line)}
+.date3{display:grid;grid-template-columns:.9fr 1.5fr 1.1fr;gap:8px}
+.fm .ma{margin:0;padding:16px 28px 24px;border-top:1px solid var(--line);background:#fafbff}
+.ferr{color:var(--bad);font-size:12.5px;font-weight:600}
+.ferr:empty{display:none}
+input.bad,select.bad{border-color:var(--bad);box-shadow:0 0 0 4px #d93f3f18}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media print{body{background:#fff}header,.intro,.fp,.toolbar,footer,.ac,#toasts{display:none!important}main{margin:0;padding:0}.layout{display:block}.panel{border:0;box-shadow:none}.tw{overflow:visible;max-height:none}table{min-width:0;font-size:9px}th,td{position:static;padding:5px 4px}.av{display:none}.birth{background:none;padding:0}}
 </style>
@@ -139,34 +157,11 @@ footer{text-align:center;color:#8d98b0;font-size:11.5px;padding:26px 15px}
 
 <main>
   <section class="intro">
-    <div><h2>Gestion des fiches</h2><div class="muted">Ajoutez des personnes, retrouvez-les vite et exportez le registre complet.</div></div>
-    <div class="stats"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-4 3.9-6 8-6s7.3 2 8 6"/></svg></div><div><div class="muted">Personnes enregistrées</div><strong id="count">0</strong></div></div>
+    <div><h2>Gestion des fiches</h2><div class="muted">Retrouvez vos fiches en un clin d’œil et exportez le registre complet.</div></div>
+    <div class="introR"><button class="primary add" id="addBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Ajouter une personne</button><div class="stats"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-4 3.9-6 8-6s7.3 2 8 6"/></svg></div><div><div class="muted">Personnes enregistrées</div><strong id="count">0</strong></div></div></div>
   </section>
 
   <section class="layout">
-    <aside class="panel fp">
-      <div class="pt"><h3 id="formTitle">Ajouter une personne</h3><div class="muted">Le prénom et le nom sont obligatoires.</div></div>
-      <form id="personForm">
-        <div class="field"><label for="firstName">Prénom(s) *</label><input id="firstName" required maxlength="120" placeholder="Ex. Awa Marième"></div>
-        <div class="field"><label for="lastName">Nom(s) *</label><input id="lastName" required maxlength="120" placeholder="Ex. Diop"></div>
-        <div class="grid">
-          <div class="field"><label for="birthDate">Date de naissance</label><input id="birthDate" type="date"></div>
-          <div class="field"><label for="birthPlace">Lieu de naissance</label><input id="birthPlace" maxlength="150" placeholder="Dakar"></div>
-        </div>
-        <div class="field"><label for="fatherName">Nom du père</label><input id="fatherName" maxlength="150" placeholder="Prénom(s) et nom"></div>
-        <div class="field"><label for="motherName">Nom de la mère</label><input id="motherName" maxlength="150" placeholder="Prénom(s) et nom"></div>
-        <div class="grid">
-          <div class="field"><label for="fatherPhone">Téléphone du père</label><input id="fatherPhone" type="tel" maxlength="35" placeholder="77 000 00 00"></div>
-          <div class="field"><label for="motherPhone">Téléphone de la mère</label><input id="motherPhone" type="tel" maxlength="35" placeholder="76 000 00 00"></div>
-        </div>
-        <div class="field"><label for="phone">Autre téléphone (parent non précisé)</label><input id="phone" type="tel" maxlength="35" placeholder="78 000 00 00"></div>
-        <div class="fa">
-          <button class="primary" type="submit" id="saveBtn">Ajouter la fiche</button>
-          <button class="secondary" type="button" id="cancelBtn" hidden>Annuler</button>
-        </div>
-        <div class="small">Les données restent sur cet appareil. Téléchargez régulièrement une sauvegarde JSON pour ne rien perdre.</div>
-      </form>
-    </aside>
 
     <section class="panel">
       <div class="pt"><h3>Liste des personnes</h3><div class="muted">Tri alphabétique automatique par nom puis prénom.</div></div>
@@ -191,7 +186,7 @@ footer{text-align:center;color:#8d98b0;font-size:11.5px;padding:26px 15px}
 <script>
 const KEY="registre_personnes_v1";
 const F=["firstName","lastName","birthDate","birthPlace","fatherName","motherName","fatherPhone","motherPhone","phone"];
-let people=[],editingId=null,newId=null;
+let people=[],newId=null;
 const $=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
 const norm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("fr");
@@ -239,35 +234,84 @@ function render(){
       <td>${ph.length?ph.map(([l,v])=>`<span class="tel"><i>${l} :</i>${esc(v)}</span>`).join(""):'<span class="dash">—</span>'}</td>
       <td class="ac"><div class="actions"><button class="secondary" data-edit="${esc(p.id)}">Modifier</button><button class="ghostdel" data-delete="${esc(p.id)}">Supprimer</button></div></td></tr>`}).join("");
   $("empty").style.display=list.length?"none":"block";
-  $("empty").textContent=q?"Aucun résultat. Essayez une autre recherche.":"Aucune fiche pour le moment. Ajoutez la première personne ou restaurez une sauvegarde.";
+  $("empty").innerHTML=q?"Aucun résultat. Essayez une autre recherche.":'<div style="margin-bottom:16px">Aucune fiche pour le moment. Ajoutez la première personne ou restaurez une sauvegarde.</div><button class="primary" data-add>Ajouter une personne</button>';
   newId=null;
 }
-function resetForm(){$("personForm").reset();editingId=null;$("formTitle").textContent="Ajouter une personne";$("saveBtn").textContent="Ajouter la fiche";$("cancelBtn").hidden=true}
-$("personForm").addEventListener("submit",e=>{
-  e.preventDefault();const data={};F.forEach(f=>data[f]=$(f).value.trim());
-  if(!data.firstName||!data.lastName){toast("Le prénom et le nom sont obligatoires.",1);return}
-  if(editingId){const i=people.findIndex(p=>p.id===editingId);if(i>=0){people[i]={...people[i],...data};newId=editingId}toast("Fiche modifiée.")}
-  else{const id=uid();people.push({id,...data});newId=id;toast("Personne ajoutée.")}
-  saveLocal();render();resetForm();
-});
-$("cancelBtn").onclick=resetForm;
+const MONTHS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function openForm(p){
+  const edit=!!p;p=p||{};
+  const [py,pm,pd]=(p.birthDate||"").split("-");
+  const yNow=new Date().getFullYear(),yMin=Math.min(1900,+py||1900);
+  const yrs=[];for(let y=yNow;y>=yMin;y--)yrs.push(y);
+  const fld=(n,l,ph,max=150)=>`<div class="field"><label for="f_${n}">${l}</label><input id="f_${n}" name="${n}" maxlength="${max}" placeholder="${ph}" value="${esc(p[n]||"")}"></div>`;
+  const o=document.createElement("div");o.className="ov";
+  o.innerHTML=`<form class="md fm" novalidate role="dialog" aria-modal="true">
+    <div class="fh"><div class="ic upload"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21c.6-3.6 3.3-5.5 7-5.5M18 14v6M15 17h6"/></svg></div>
+      <div><h3>${edit?"Modifier la fiche":"Ajouter une personne"}</h3><div class="muted">${edit?esc(p.firstName+" "+p.lastName):"Renseignez les informations ci-dessous."}</div></div></div>
+    <div class="fb">
+      <div class="sec">Identité</div>
+      <div class="grid">${fld("firstName","Prénom(s) *","Ex. Awa Marième",120)}${fld("lastName","Nom(s) *","Ex. Diop",120)}</div>
+      <div class="sec">Naissance</div>
+      <div class="grid"><div class="field"><label>Date de naissance</label><div class="date3">
+        <select name="d" aria-label="Jour"></select>
+        <select name="m" aria-label="Mois"><option value="">Mois</option>${MONTHS.map((n,i)=>`<option value="${i+1}">${n}</option>`).join("")}</select>
+        <select name="y" aria-label="Année"><option value="">Année</option>${yrs.map(y=>`<option>${y}</option>`).join("")}</select></div></div>
+        ${fld("birthPlace","Lieu de naissance","Dakar")}</div>
+      <div class="sec">Parents et contacts</div>
+      <div class="grid">${fld("fatherName","Nom du père","Prénom(s) et nom")}${fld("motherName","Nom de la mère","Prénom(s) et nom")}</div>
+      <div class="grid">${fld("fatherPhone","Téléphone du père","77 000 00 00",35)}${fld("motherPhone","Téléphone de la mère","76 000 00 00",35)}</div>
+      ${fld("phone","Autre téléphone (parent non précisé)","78 000 00 00",35)}
+      <div class="ferr" role="alert"></div>
+    </div>
+    <div class="ma"><button type="button" class="secondary" data-x>Annuler</button><button type="submit" class="primary">${edit?"Enregistrer les modifications":"Ajouter la fiche"}</button></div></form>`;
+  const form=o.firstElementChild,el=n=>form.elements[n],ferr=form.querySelector(".ferr");
+  const sd=el("d"),sm=el("m"),sy=el("y");
+  const fillDays=()=>{const max=sm.value?new Date(+sy.value||2000,+sm.value,0).getDate():31,cur=sd.value;
+    sd.innerHTML='<option value="">Jour</option>'+Array.from({length:max},(_,i)=>`<option>${i+1}</option>`).join("");if(cur&&+cur<=max)sd.value=cur};
+  fillDays();sm.value=pm?String(+pm):"";sy.value=py||"";fillDays();sd.value=pd?String(+pd):"";
+  sm.onchange=sy.onchange=fillDays;
+  const k=e=>{if(e.key==="Escape")close()};
+  function close(){document.removeEventListener("keydown",k);o.classList.add("out");setTimeout(()=>o.remove(),180)}
+  form.querySelector("[data-x]").onclick=close;
+  form.addEventListener("input",()=>{ferr.textContent="";form.querySelectorAll(".bad").forEach(x=>x.classList.remove("bad"))});
+  form.onsubmit=e=>{
+    e.preventDefault();const g=n=>el(n).value.trim(),bad=[];
+    ["firstName","lastName"].forEach(n=>{if(!g(n))bad.push(el(n))});
+    if(bad.length){bad.forEach(x=>x.classList.add("bad"));ferr.textContent="Le prénom et le nom sont obligatoires.";bad[0].focus();return}
+    let iso="";
+    if(sd.value||sm.value||sy.value){
+      if(!(sd.value&&sm.value&&sy.value)){[sd,sm,sy].forEach(x=>!x.value&&x.classList.add("bad"));ferr.textContent="Complétez la date de naissance (jour, mois et année) ou laissez-la vide.";return}
+      iso=`${sy.value}-${sm.value.padStart(2,"0")}-${sd.value.padStart(2,"0")}`;
+    }
+    const data={};F.forEach(f=>data[f]=f==="birthDate"?iso:g(f));
+    if(edit){const i=people.findIndex(x=>x.id===p.id);if(i>=0){people[i]={...people[i],...data};newId=p.id}}
+    else{const id=uid();people.push({id,...data});newId=id}
+    if(!saveLocal())return;
+    render();close();toast(edit?"Fiche modifiée avec succès.":"Personne ajoutée avec succès.");
+  };
+  document.addEventListener("keydown",k);document.body.append(o);el("firstName").focus();
+}
+document.addEventListener("click",e=>{if(e.target.closest("#addBtn,[data-add]"))openForm()});
 $("search").oninput=render;
 $("tableBody").addEventListener("click",async e=>{
   const ed=e.target.closest("[data-edit]"),del=e.target.closest("[data-delete]");
-  if(ed){const p=people.find(x=>x.id===ed.dataset.edit);if(!p)return;editingId=p.id;F.forEach(f=>$(f).value=p[f]||"");$("formTitle").textContent="Modifier une personne";$("saveBtn").textContent="Enregistrer les modifications";$("cancelBtn").hidden=false;$("personForm").scrollIntoView({behavior:"smooth",block:"start"})}
+  if(ed){const p=people.find(x=>x.id===ed.dataset.edit);if(p)openForm(p)}
   if(del){const p=people.find(x=>x.id===del.dataset.delete);if(!p)return;
     const ok=await modal({icon:"warn",title:"Supprimer cette fiche ?",body:`<p><b>${esc(p.firstName)} ${esc(p.lastName)}</b> sera retiré(e) du registre. Cette action est définitive.</p>`,actions:[{label:"Annuler",cls:"secondary",value:false},{label:"Supprimer",cls:"danger",value:true}]});
-    if(ok){people=people.filter(x=>x.id!==p.id);if(editingId===p.id)resetForm();saveLocal();render();toast("Fiche supprimée.")}}
+    if(ok){people=people.filter(x=>x.id!==p.id);saveLocal();render();toast("Fiche supprimée.")}}
 });
 
 /* export */
-function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)}
+async function download(blob,name){
+  const dl=window.claude&&claude.use?await claude.use("downloads"):null;
+  if(dl){try{await dl.save({filename:name,data:blob});return true}catch(e){if(!e||e.code!=="declined")toast("Téléchargement impossible dans cette vue.",1);return false}}
+  const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);return true}
 const stamp=()=>new Date().toISOString().slice(0,10);
 $("printBtn").onclick=()=>window.print();
-$("backup").onclick=()=>{
+$("backup").onclick=async()=>{
   if(!people.length){toast("Aucune fiche à sauvegarder.",1);return}
-  download(new Blob([JSON.stringify({app:"Registre des personnes",version:1,people:sorted()},null,2)],{type:"application/json"}),`sauvegarde-registre-${stamp()}.json`);
-  toast("Sauvegarde téléchargée. Gardez-la en lieu sûr.");
+  if(await download(new Blob([JSON.stringify({app:"Registre des personnes",version:1,people:sorted()},null,2)],{type:"application/json"}),`sauvegarde-registre-${stamp()}.json`))
+    toast("Sauvegarde téléchargée. Gardez-la en lieu sûr.");
 };
 $("wordBtn").onclick=async()=>{
   if(!people.length){toast("Aucune fiche à exporter.",1);return}
@@ -284,8 +328,7 @@ $("wordBtn").onclick=async()=>{
     const doc=new Document({creator:"Registre des personnes",title:"Registre des personnes",sections:[{properties:{page:{size:{orientation:PageOrientation.LANDSCAPE},margin:{top:700,right:600,bottom:700,left:600}}},children:[
       new Paragraph({heading:HeadingLevel.HEADING_1,alignment:AlignmentType.CENTER,children:[new TextRun({text:"REGISTRE DES PERSONNES",bold:true,font:"Arial",size:30,color:"243A8A"})]}),
       new Paragraph({alignment:AlignmentType.CENTER,spacing:{after:250},children:[new TextRun({text:`${people.length} personne(s) — exporté le ${new Date().toLocaleDateString("fr-FR")}`,font:"Arial",size:18,color:"65738A"})]}),table]}]});
-    download(await Packer.toBlob(doc),`registre-personnes-${stamp()}.docx`);
-    toast("Document Word téléchargé.");
+    if(await download(await Packer.toBlob(doc),`registre-personnes-${stamp()}.docx`))toast("Document Word téléchargé.");
   }catch(err){console.error(err);toast("Erreur lors de la création du Word. Réessayez.",1)}
   finally{btn.disabled=false;btn.innerHTML=old}
 };
@@ -332,7 +375,7 @@ $("backupFile").addEventListener("change",async e=>{
   if(res==="merge"){const ids=new Set(people.map(p=>p.id));added=valid.filter(p=>!ids.has(p.id));dupes=valid.length-added.length;people=[...people,...added]}
   else people=valid;
   if(!saveLocal())return;
-  render();resetForm();
+  render();
   modal({icon:"success",title:"Importation réussie !",body:`<p><b>${added.length}</b> fiche${added.length>1?"s ont":" a"} été ${res==="merge"?"ajoutée"+(added.length>1?"s":""):"importée"+(added.length>1?"s":"")}.${dupes?`<br>${dupes} déjà présente(s), non dupliquée(s).`:""}<br>Le registre compte maintenant <b>${people.length}</b> personne${people.length>1?"s":""}.</p>`,actions:[{label:"Voir le registre",cls:"primary",value:true}]});
 });
 
@@ -340,3 +383,4 @@ loadLocal();render();
 </script>
 </body>
 </html>
+<script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="f289907c-97a1-4929-af2f-954b5421397a" data-app-host="app.netlify.com" data-account-tier="free"></script>
