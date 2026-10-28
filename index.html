@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registre des personnes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<style>
+:root{--blue:#3b4fd8;--blue2:#2a39a8;--ink:#121a33;--bg:#f3f5fb;--card:#fff;--line:#e4e8f3;--text:#1a2340;--muted:#6f7a94;--soft:#eef1ff;--ok:#12a46b;--bad:#d93f3f;--warn:#e89a14;--gold:#f6c453;--r:20px;--sh:0 18px 45px -18px rgba(30,45,110,.22)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(900px 420px at 0 0,#e3e9ff,transparent 60%),radial-gradient(700px 400px at 100% 30%,#fff2d6 0,transparent 55%),var(--bg);color:var(--text);font:14px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+header{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(115deg,#0f1630,#1f2f7a 55%,#3b4fd8);color:#fff;padding:26px max(5%,calc((100% - 1450px)/2));display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+header:before,header:after{content:"";position:absolute;z-index:-1;border-radius:50%}
+header:before{width:420px;height:420px;right:-90px;top:-250px;background:radial-gradient(circle,#f6c45355,transparent 65%)}
+header:after{width:300px;height:300px;left:30%;bottom:-210px;border:1px solid #ffffff26;box-shadow:0 0 0 34px #ffffff0a,0 0 0 70px #ffffff07}
+.brand{display:flex;align-items:center;gap:15px}
+.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),#ff9d5c);color:#2b1c00;box-shadow:0 10px 25px -8px #f6c453aa}
+h1{margin:0;font-size:clamp(21px,2.3vw,28px);letter-spacing:-.6px;font-weight:800}
+header p{margin:2px 0 0;color:#c9d4f8;font-size:13px}
+.hbtns{display:flex;gap:9px;flex-wrap:wrap}
+main{max-width:1450px;margin:30px auto;padding:0 24px}
+.intro{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+h2{margin:0 0 4px;font-size:clamp(25px,2.7vw,33px);letter-spacing:-1px;font-weight:800}
+.muted{color:var(--muted);font-size:13px}
+.stats{display:flex;align-items:center;gap:15px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 22px 12px 14px;box-shadow:var(--sh)}
+.stats .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--soft);color:var(--blue)}
+.stats strong{display:block;font-size:30px;line-height:1;color:var(--blue);letter-spacing:-1px;font-weight:800}
+.layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:22px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);min-width:0}
+.pt{padding:20px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#f9faff)}
+.pt h3{margin:0 0 3px;font-size:16px;font-weight:800}
+form{padding:22px;display:grid;gap:14px}
+.field{display:grid;gap:6px}
+label{font-size:12px;font-weight:700;color:#4a5878}
+input{width:100%;min-width:0;padding:12px 13px;border:1.5px solid #dde3f0;border-radius:12px;font:inherit;font-size:13px;background:#fafbff;color:var(--text);transition:.18s}
+input::placeholder{color:#a3aec4}
+input:focus{outline:0;background:#fff;border-color:var(--blue);box-shadow:0 0 0 4px #3b4fd81c}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid transparent;border-radius:12px;padding:11px 15px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s}
+button:hover{transform:translateY(-1px)}
+button:focus-visible{outline:3px solid #a9b7ff;outline-offset:2px}
+button:disabled{opacity:.6;cursor:wait;transform:none}
+button svg{width:16px;height:16px;flex:none}
+.primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 8px 18px -6px #3b4fd88c}
+.primary:hover{box-shadow:0 12px 24px -6px #3b4fd8aa}
+.secondary{background:#eff2fb;color:#2f3d5f;border-color:#e2e8f6}
+.secondary:hover{background:#e4e9f8}
+header .secondary{background:#ffffff1f;color:#fff;border-color:#ffffff33;backdrop-filter:blur(6px)}
+header .secondary:hover{background:#ffffff33}
+.danger{background:linear-gradient(135deg,#e24b4b,#c22f2f);color:#fff;box-shadow:0 8px 18px -6px #d93f3f88}
+.ghostdel{background:#fff1f0;color:#c03434;border-color:#ffdfdc}
+.ghostdel:hover{background:#ffe3e0}
+.fa{display:flex;gap:8px}.fa button{flex:1}
+.small{font-size:11.5px;color:var(--muted);line-height:1.6;padding:11px 13px;border-radius:12px;background:#f6f8fd;border:1px dashed #dbe2f2}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:15px 18px;border-bottom:1px solid var(--line)}
+.search{flex:1;min-width:200px;position:relative}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;color:#97a3bd}
+.search input{padding-left:38px}
+.tw{overflow:auto;max-height:660px}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:980px;font-size:12.5px}
+th{position:sticky;top:0;z-index:1;background:#f3f5fc;color:#56658a;text-align:left;font-size:11.5px;font-weight:800}
+td,th{padding:13px 14px;border-bottom:1px solid #edf0f8;vertical-align:middle}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:#f6f8ff}
+tbody tr:last-child td{border-bottom:0}
+tr.new{animation:flash 1.8s ease-out}
+@keyframes flash{from{background:#fff3cf}to{background:transparent}}
+.person{display:flex;align-items:center;gap:12px}
+.av{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;flex:none}
+.person b{display:block;color:#1f2d57;font-size:13.5px}
+.person span{color:var(--muted);font-size:12px}
+.birth{display:inline-block;padding:5px 11px;border-radius:99px;background:var(--soft);color:#33449b;font-weight:600;font-size:12px}
+.tel{display:block;white-space:nowrap}.tel i{font-style:normal;color:var(--muted);margin-right:4px}
+.dash{color:#b3bcd0}
+.actions{display:flex;gap:6px;min-width:150px}.actions button{padding:7px 10px;font-size:11px}
+.empty{padding:54px 20px;text-align:center;color:var(--muted)}
+footer{text-align:center;color:#8d98b0;font-size:11.5px;padding:26px 15px}
+/* toasts */
+#toasts{position:fixed;right:20px;bottom:20px;z-index:90;display:grid;gap:10px;max-width:calc(100% - 40px)}
+.toast{display:flex;gap:11px;align-items:center;background:var(--ink);color:#fff;padding:13px 18px;border-radius:14px;box-shadow:0 18px 40px -12px #0008;font-size:13px;animation:tin .3s cubic-bezier(.2,1.2,.4,1)}
+.toast:before{content:"✓";display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ok);font-weight:800;font-size:12px;flex:none}
+.toast.err:before{content:"!";background:var(--bad)}
+@keyframes tin{from{opacity:0;transform:translateY(14px) scale(.96)}}
+/* modals */
+.ov{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px;background:#0b1129a6;backdrop-filter:blur(6px);animation:fade .2s}
+.ov.out{opacity:0;transition:opacity .18s}
+.md{width:min(440px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:26px;padding:30px 28px 24px;text-align:center;box-shadow:0 40px 90px -20px #000a;animation:pop .35s cubic-bezier(.2,1.25,.4,1)}
+.md.wide{width:min(560px,100%)}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.9)}}
+.ic{width:68px;height:68px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;position:relative}
+.ic svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.ic.success{background:#e3f8ef;color:var(--ok)}.ic.error{background:#ffe9e8;color:var(--bad)}.ic.warn{background:#fff3da;color:var(--warn)}.ic.upload{background:var(--soft);color:var(--blue)}
+.ic.success:after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid var(--ok);animation:ring .9s ease-out .15s both}
+@keyframes ring{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
+.ic.success path{stroke-dasharray:30;animation:draw .5s ease-out .2s both}
+@keyframes draw{from{stroke-dashoffset:30}}
+.md h3{margin:0 0 8px;font-size:20px;font-weight:800;letter-spacing:-.4px}
+.mb{color:#51607f;font-size:13.5px;text-align:left}
+.mb p{margin:0 0 10px;text-align:center}
+.ma{display:flex;gap:10px;margin-top:22px}.ma button{flex:1;padding:13px}
+.chips{display:flex;gap:8px;margin:14px 0}
+.chip{flex:1;border-radius:14px;padding:10px 6px;background:#f4f6fd;text-align:center}
+.chip b{display:block;font-size:22px;color:var(--blue);line-height:1.1}.chip span{font-size:11px;color:var(--muted)}
+.chip.g b{color:var(--ok)}.chip.w b{color:var(--warn)}
+.prev{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:12px 0}
+.prev div{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 13px;font-size:12.5px;border-bottom:1px solid #eef1f8}
+.prev div:last-child{border:0}
+.prev em{font-style:normal;color:var(--muted);font-size:11.5px;text-align:right}
+.alerts{background:#fff8e8;border:1px solid #fbe3ae;color:#8a5a00;border-radius:12px;padding:10px 13px;font-size:12px;margin:10px 0}
+.alerts ul{margin:4px 0 0;padding-left:18px}
+.opt{display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--line);border-radius:14px;padding:11px 13px;margin-top:8px;cursor:pointer;transition:.15s}
+.opt:has(input:checked){border-color:var(--blue);background:var(--soft)}
+.opt input{width:auto;margin-top:3px;accent-color:var(--blue)}
+.opt b{display:block;color:var(--text);font-size:13px}.opt span{font-size:12px;color:var(--muted)}
+@media(min-width:1001px){.fp{position:sticky;top:18px}}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}}
+@media(max-width:650px){main{padding:0 12px}header{padding:20px 16px}.hbtns{width:100%}.hbtns button{flex:1}.stats{width:100%}.toolbar button{flex:1}.search{flex-basis:100%}.ma{flex-direction:column-reverse}}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{body{background:#fff}header,.intro,.fp,.toolbar,footer,.ac,#toasts{display:none!important}main{margin:0;padding:0}.layout{display:block}.panel{border:0;box-shadow:none}.tw{overflow:visible;max-height:none}table{min-width:0;font-size:9px}th,td{position:static;padding:5px 4px}.av{display:none}.birth{background:none;padding:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c1.9.7 3.2 2.4 3.5 5.2"/></svg></div>
+    <div><h1>Registre des personnes</h1><p>Gérez, classez et exportez vos fiches en toute simplicité</p></div>
+  </div>
+  <div class="hbtns">
+    <button class="secondary" id="backup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 20h16"/></svg>Sauvegarder</button>
+    <button class="secondary" id="restore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 20h16"/></svg>Restaurer une sauvegarde</button>
+    <input type="file" id="backupFile" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <div><h2>Gestion des fiches</h2><div class="muted">Ajoutez des personnes, retrouvez-les vite et exportez le registre complet.</div></div>
+    <div class="stats"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-4 3.9-6 8-6s7.3 2 8 6"/></svg></div><div><div class="muted">Personnes enregistrées</div><strong id="count">0</strong></div></div>
+  </section>
+
+  <section class="layout">
+    <aside class="panel fp">
+      <div class="pt"><h3 id="formTitle">Ajouter une personne</h3><div class="muted">Le prénom et le nom sont obligatoires.</div></div>
+      <form id="personForm">
+        <div class="field"><label for="firstName">Prénom(s) *</label><input id="firstName" required maxlength="120" placeholder="Ex. Awa Marième"></div>
+        <div class="field"><label for="lastName">Nom(s) *</label><input id="lastName" required maxlength="120" placeholder="Ex. Diop"></div>
+        <div class="grid">
+          <div class="field"><label for="birthDate">Date de naissance</label><input id="birthDate" type="date"></div>
+          <div class="field"><label for="birthPlace">Lieu de naissance</label><input id="birthPlace" maxlength="150" placeholder="Dakar"></div>
+        </div>
+        <div class="field"><label for="fatherName">Nom du père</label><input id="fatherName" maxlength="150" placeholder="Prénom(s) et nom"></div>
+        <div class="field"><label for="motherName">Nom de la mère</label><input id="motherName" maxlength="150" placeholder="Prénom(s) et nom"></div>
+        <div class="grid">
+          <div class="field"><label for="fatherPhone">Téléphone du père</label><input id="fatherPhone" type="tel" maxlength="35" placeholder="77 000 00 00"></div>
+          <div class="field"><label for="motherPhone">Téléphone de la mère</label><input id="motherPhone" type="tel" maxlength="35" placeholder="76 000 00 00"></div>
+        </div>
+        <div class="field"><label for="phone">Autre téléphone (parent non précisé)</label><input id="phone" type="tel" maxlength="35" placeholder="78 000 00 00"></div>
+        <div class="fa">
+          <button class="primary" type="submit" id="saveBtn">Ajouter la fiche</button>
+          <button class="secondary" type="button" id="cancelBtn" hidden>Annuler</button>
+        </div>
+        <div class="small">Les données restent sur cet appareil. Téléchargez régulièrement une sauvegarde JSON pour ne rien perdre.</div>
+      </form>
+    </aside>
+
+    <section class="panel">
+      <div class="pt"><h3>Liste des personnes</h3><div class="muted">Tri alphabétique automatique par nom puis prénom.</div></div>
+      <div class="toolbar">
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="search" type="search" placeholder="Rechercher une personne, un lieu…"></div>
+        <button class="secondary" id="wordBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h6"/></svg>Exporter Word</button>
+        <button class="secondary" id="printBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg>Imprimer</button>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Personne</th><th>Naissance</th><th>Père</th><th>Mère</th><th>Téléphone(s)</th><th class="ac">Actions</th></tr></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <div id="empty" class="empty"></div>
+      </div>
+    </section>
+  </section>
+</main>
+<footer>Registre des personnes — stockage local, export Word et impression</footer>
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+const KEY="registre_personnes_v1";
+const F=["firstName","lastName","birthDate","birthPlace","fatherName","motherName","fatherPhone","motherPhone","phone"];
+let people=[],editingId=null,newId=null;
+const $=id=>document.getElementById(id);
+const uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
+const norm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("fr");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sorted=(l=people)=>[...l].sort((a,b)=>norm(a.lastName).localeCompare(norm(b.lastName),"fr")||norm(a.firstName).localeCompare(norm(b.firstName),"fr"));
+const dateFR=v=>{if(!v)return"";const p=v.split("-");return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:v};
+function birthText(p){const d=dateFR(p.birthDate),l=p.birthPlace;return d&&l?`Né(e) le ${d} à ${l}`:d?`Né(e) le ${d}`:l?`Né(e) à ${l}`:""}
+function phones(p){const a=[];if(p.fatherPhone)a.push(["Père",p.fatherPhone]);if(p.motherPhone)a.push(["Mère",p.motherPhone]);if(p.phone)a.push(["Tél.",p.phone]);return a}
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return h};
+const initials=p=>((p.firstName||"?")[0]+(p.lastName||"")[0]).toUpperCase();
+const avatar=p=>`<div class="av" style="background:linear-gradient(135deg,hsl(${hue(p.lastName+p.firstName)} 62% 52%),hsl(${(hue(p.lastName+p.firstName)+40)%360} 65% 42%))">${esc(initials(p))}</div>`;
+
+/* toasts */
+function toast(msg,err){const t=document.createElement("div");t.className="toast"+(err?" err":"");t.textContent=msg;$("toasts").append(t);setTimeout(()=>{t.style.opacity=0;t.style.transition="opacity .3s";setTimeout(()=>t.remove(),300)},4200)}
+
+/* modals */
+const IC={success:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',error:'<path d="M6 6l12 12M18 6 6 18"/>',warn:'<path d="M12 8v5M12 17h.01"/>',upload:'<path d="M12 16V4m0 0L8 8m4-4 4 4M4 20h16"/>'};
+function modal({icon="upload",title,body="",wide,actions=[{label:"OK",cls:"primary",value:true}]}){
+  return new Promise(res=>{
+    const o=document.createElement("div");o.className="ov";
+    o.innerHTML=`<div class="md${wide?" wide":""}" role="dialog" aria-modal="true"><div class="ic ${icon}"><svg viewBox="0 0 24 24">${IC[icon]}</svg></div><h3>${title}</h3><div class="mb">${body}</div><div class="ma"></div></div>`;
+    const k=e=>{if(e.key==="Escape")close(null)};
+    function close(v){document.removeEventListener("keydown",k);o.classList.add("out");setTimeout(()=>{o.remove();res(v)},180)}
+    actions.forEach(a=>{const b=document.createElement("button");b.className=a.cls||"secondary";b.textContent=a.label;b.onclick=()=>close(typeof a.value==="function"?a.value(o):a.value);o.querySelector(".ma").append(b)});
+    o.addEventListener("mousedown",e=>{if(e.target===o)close(null)});
+    document.addEventListener("keydown",k);document.body.append(o);
+    o.querySelector(".ma button:last-child").focus();
+  });
+}
+
+/* data */
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(people));return true}catch(e){toast("Enregistrement impossible. Téléchargez une sauvegarde et libérez de l’espace.",1);return false}}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem(KEY)||"[]");if(Array.isArray(d))people=d.filter(p=>p&&p.id)}catch(e){toast("Impossible de lire les données enregistrées.",1)}}
+function render(){
+  const q=norm($("search").value.trim());
+  const list=sorted().filter(p=>!q||norm([p.firstName,p.lastName,birthText(p),p.fatherName,p.motherName,p.fatherPhone,p.motherPhone,p.phone].join(" ")).includes(q));
+  $("count").textContent=people.length;
+  $("tableBody").innerHTML=list.map(p=>{
+    const bt=birthText(p),ph=phones(p);
+    return `<tr${p.id===newId?' class="new"':""}>
+      <td><div class="person">${avatar(p)}<div><b>${esc(p.lastName)}</b><span>${esc(p.firstName)}</span></div></div></td>
+      <td>${bt?`<span class="birth">${esc(bt)}</span>`:'<span class="dash">—</span>'}</td>
+      <td>${esc(p.fatherName)||'<span class="dash">—</span>'}</td>
+      <td>${esc(p.motherName)||'<span class="dash">—</span>'}</td>
+      <td>${ph.length?ph.map(([l,v])=>`<span class="tel"><i>${l} :</i>${esc(v)}</span>`).join(""):'<span class="dash">—</span>'}</td>
+      <td class="ac"><div class="actions"><button class="secondary" data-edit="${esc(p.id)}">Modifier</button><button class="ghostdel" data-delete="${esc(p.id)}">Supprimer</button></div></td></tr>`}).join("");
+  $("empty").style.display=list.length?"none":"block";
+  $("empty").textContent=q?"Aucun résultat. Essayez une autre recherche.":"Aucune fiche pour le moment. Ajoutez la première personne ou restaurez une sauvegarde.";
+  newId=null;
+}
+function resetForm(){$("personForm").reset();editingId=null;$("formTitle").textContent="Ajouter une personne";$("saveBtn").textContent="Ajouter la fiche";$("cancelBtn").hidden=true}
+$("personForm").addEventListener("submit",e=>{
+  e.preventDefault();const data={};F.forEach(f=>data[f]=$(f).value.trim());
+  if(!data.firstName||!data.lastName){toast("Le prénom et le nom sont obligatoires.",1);return}
+  if(editingId){const i=people.findIndex(p=>p.id===editingId);if(i>=0){people[i]={...people[i],...data};newId=editingId}toast("Fiche modifiée.")}
+  else{const id=uid();people.push({id,...data});newId=id;toast("Personne ajoutée.")}
+  saveLocal();render();resetForm();
+});
+$("cancelBtn").onclick=resetForm;
+$("search").oninput=render;
+$("tableBody").addEventListener("click",async e=>{
+  const ed=e.target.closest("[data-edit]"),del=e.target.closest("[data-delete]");
+  if(ed){const p=people.find(x=>x.id===ed.dataset.edit);if(!p)return;editingId=p.id;F.forEach(f=>$(f).value=p[f]||"");$("formTitle").textContent="Modifier une personne";$("saveBtn").textContent="Enregistrer les modifications";$("cancelBtn").hidden=false;$("personForm").scrollIntoView({behavior:"smooth",block:"start"})}
+  if(del){const p=people.find(x=>x.id===del.dataset.delete);if(!p)return;
+    const ok=await modal({icon:"warn",title:"Supprimer cette fiche ?",body:`<p><b>${esc(p.firstName)} ${esc(p.lastName)}</b> sera retiré(e) du registre. Cette action est définitive.</p>`,actions:[{label:"Annuler",cls:"secondary",value:false},{label:"Supprimer",cls:"danger",value:true}]});
+    if(ok){people=people.filter(x=>x.id!==p.id);if(editingId===p.id)resetForm();saveLocal();render();toast("Fiche supprimée.")}}
+});
+
+/* export */
+function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)}
+const stamp=()=>new Date().toISOString().slice(0,10);
+$("printBtn").onclick=()=>window.print();
+$("backup").onclick=()=>{
+  if(!people.length){toast("Aucune fiche à sauvegarder.",1);return}
+  download(new Blob([JSON.stringify({app:"Registre des personnes",version:1,people:sorted()},null,2)],{type:"application/json"}),`sauvegarde-registre-${stamp()}.json`);
+  toast("Sauvegarde téléchargée. Gardez-la en lieu sûr.");
+};
+$("wordBtn").onclick=async()=>{
+  if(!people.length){toast("Aucune fiche à exporter.",1);return}
+  if(!window.docx){toast("Connexion Internet requise pour créer le document Word.",1);return}
+  const btn=$("wordBtn"),old=btn.innerHTML;btn.disabled=true;btn.textContent="Préparation…";
+  try{
+    const {Document,Packer,Paragraph,Table,TableRow,TableCell,WidthType,BorderStyle,AlignmentType,HeadingLevel,TextRun,PageOrientation}=window.docx;
+    const bd={style:BorderStyle.SINGLE,size:1,color:"D5DCE6"},borders={top:bd,bottom:bd,left:bd,right:bd};
+    const heads=["Prénom(s)","Nom(s)","Naissance","Père","Mère","Téléphone(s)"],w=[2300,2000,3000,2400,2400,2300];
+    const cell=(v,h,i)=>new TableCell({width:{size:w[i],type:WidthType.DXA},margins:{top:90,bottom:90,left:80,right:80},borders,shading:h?{fill:"E8EDFF"}:undefined,
+      children:String(v||"—").split("\n").map(t=>new Paragraph({children:[new TextRun({text:t,bold:h,font:"Arial",size:h?17:16,color:h?"243A8A":"243247"})]}))});
+    const rows=sorted().map(p=>[p.firstName,p.lastName,birthText(p),p.fatherName,p.motherName,phones(p).map(([l,v])=>`${l} : ${v}`).join("\n")]);
+    const table=new Table({width:{size:100,type:WidthType.PERCENTAGE},columnWidths:w,rows:[new TableRow({tableHeader:true,children:heads.map((h,i)=>cell(h,true,i))}),...rows.map(r=>new TableRow({cantSplit:true,children:r.map((v,i)=>cell(v,false,i))}))]});
+    const doc=new Document({creator:"Registre des personnes",title:"Registre des personnes",sections:[{properties:{page:{size:{orientation:PageOrientation.LANDSCAPE},margin:{top:700,right:600,bottom:700,left:600}}},children:[
+      new Paragraph({heading:HeadingLevel.HEADING_1,alignment:AlignmentType.CENTER,children:[new TextRun({text:"REGISTRE DES PERSONNES",bold:true,font:"Arial",size:30,color:"243A8A"})]}),
+      new Paragraph({alignment:AlignmentType.CENTER,spacing:{after:250},children:[new TextRun({text:`${people.length} personne(s) — exporté le ${new Date().toLocaleDateString("fr-FR")}`,font:"Arial",size:18,color:"65738A"})]}),table]}]});
+    download(await Packer.toBlob(doc),`registre-personnes-${stamp()}.docx`);
+    toast("Document Word téléchargé.");
+  }catch(err){console.error(err);toast("Erreur lors de la création du Word. Réessayez.",1)}
+  finally{btn.disabled=false;btn.innerHTML=old}
+};
+
+/* import */
+function fixDate(v){
+  if(!v)return"";
+  let iso=v;const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(v);
+  if(m)iso=`${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(iso))return null;
+  const d=new Date(iso+"T00:00:00Z");return !isNaN(d)&&d.toISOString().slice(0,10)===iso?iso:null;
+}
+$("restore").onclick=()=>$("backupFile").click();
+$("backupFile").addEventListener("change",async e=>{
+  const file=e.target.files[0];e.target.value="";if(!file)return;
+  let parsed;
+  try{parsed=JSON.parse((await file.text()).replace(/^\uFEFF/,""))}
+  catch{return modal({icon:"error",title:"Fichier illisible",body:`<p>« ${esc(file.name)} » n’est pas un fichier JSON valide. Choisissez une sauvegarde créée par ce registre.</p>`,actions:[{label:"Fermer",cls:"primary",value:true}]})}
+  const raw=Array.isArray(parsed)?parsed:parsed&&parsed.people;
+  if(!Array.isArray(raw))return modal({icon:"error",title:"Format non reconnu",body:"<p>Aucune liste de personnes n’a été trouvée dans ce fichier.</p>",actions:[{label:"Fermer",cls:"primary",value:true}]});
+  const valid=[],skipped=[],seen=new Set();let badDates=0;
+  raw.forEach((p,i)=>{
+    if(!p||!String(p.firstName||"").trim()||!String(p.lastName||"").trim()){skipped.push(i+1);return}
+    const o={};F.forEach(f=>o[f]=String(p[f]??"").trim());
+    const d=fixDate(o.birthDate);if(d===null){badDates++;o.birthDate=""}else o.birthDate=d;
+    let id=String(p.id||"");if(!id||seen.has(id))id=uid();seen.add(id);o.id=id;valid.push(o);
+  });
+  if(!valid.length)return modal({icon:"error",title:"Aucune fiche importable",body:"<p>Chaque fiche doit avoir au moins un prénom et un nom.</p>",actions:[{label:"Fermer",cls:"primary",value:true}]});
+  const withBirth=valid.filter(p=>p.birthDate&&p.birthPlace).length;
+  const prev=sorted(valid).slice(0,4).map(p=>`<div><span><b>${esc(p.firstName)} ${esc(p.lastName)}</b></span><em>${esc(birthText(p))||"Sans naissance"}</em></div>`).join("");
+  const alerts=[];
+  if(skipped.length)alerts.push(`${skipped.length} fiche(s) ignorée(s) : prénom ou nom manquant (ligne${skipped.length>1?"s":""} ${skipped.slice(0,8).join(", ")}${skipped.length>8?"…":""}).`);
+  if(badDates)alerts.push(`${badDates} date(s) de naissance invalide(s) laissée(s) vide(s).`);
+  const has=people.length>0;
+  const body=`<p>Fichier : <b>${esc(file.name)}</b></p>
+    <div class="chips"><div class="chip g"><b>${valid.length}</b><span>fiches à importer</span></div><div class="chip"><b>${withBirth}</b><span>avec date et lieu</span></div><div class="chip w"><b>${skipped.length}</b><span>ignorée(s)</span></div></div>
+    <div class="prev">${prev}${valid.length>4?`<div><em>… et ${valid.length-4} autre(s) fiche(s)</em></div>`:""}</div>
+    ${alerts.length?`<div class="alerts">À noter :<ul>${alerts.map(a=>`<li>${a}</li>`).join("")}</ul></div>`:""}
+    ${has?`<label class="opt"><input type="radio" name="mode" value="replace" checked><div><b>Remplacer les fiches actuelles</b><span>Les ${people.length} fiches existantes seront supprimées.</span></div></label>
+    <label class="opt"><input type="radio" name="mode" value="merge"><div><b>Ajouter aux fiches actuelles</b><span>Les fiches déjà présentes (même identifiant) ne sont pas dupliquées.</span></div></label>`:""}`;
+  const res=await modal({icon:"upload",title:"Valider l’importation ?",wide:true,body,actions:[{label:"Annuler",cls:"secondary",value:null},{label:`Importer ${valid.length} fiche${valid.length>1?"s":""}`,cls:"primary",value:o=>{const r=o.querySelector('input[name=mode]:checked');return r?r.value:"replace"}}]});
+  if(!res)return toast("Importation annulée.");
+  let added=valid,dupes=0;
+  if(res==="merge"){const ids=new Set(people.map(p=>p.id));added=valid.filter(p=>!ids.has(p.id));dupes=valid.length-added.length;people=[...people,...added]}
+  else people=valid;
+  if(!saveLocal())return;
+  render();resetForm();
+  modal({icon:"success",title:"Importation réussie !",body:`<p><b>${added.length}</b> fiche${added.length>1?"s ont":" a"} été ${res==="merge"?"ajoutée"+(added.length>1?"s":""):"importée"+(added.length>1?"s":"")}.${dupes?`<br>${dupes} déjà présente(s), non dupliquée(s).`:""}<br>Le registre compte maintenant <b>${people.length}</b> personne${people.length>1?"s":""}.</p>`,actions:[{label:"Voir le registre",cls:"primary",value:true}]});
+});
+
+loadLocal();render();
+</script>
+</body>
+</html>
